@@ -36,9 +36,7 @@ function StatelessBoard(){
                 if(pointer_stateless > 4) clearInterval(timerStateless.current);
             },1000)
         }
-        return () => {
-            clearInterval(timerStateless.current);
-        }
+        return () => clearInterval(timerStateless.current);
     },[]);
 
     if(!handle) return null;

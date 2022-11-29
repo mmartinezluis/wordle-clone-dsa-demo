@@ -20,7 +20,7 @@ export default function TimerHook({
     const updateStatefull = useCallback((pointer, boardCallback, pointerCallback) => {
         if(timerId.current !== 1) return;
         timerId.current = setInterval(() => {
-            const clone = [...board];
+            const clone = [...board]
             console.log(pointer)
             clone[row][pointer] = ALPHABET[pointer];
             boardCallback(clone);
@@ -33,8 +33,9 @@ export default function TimerHook({
         timerStateless.current = setInterval(() => {
             console.log(pointer_stateless)
             matrix[row_stateless][pointer_stateless] = ALPHABET[pointer_stateless];
-            pointer_stateless++
-        },2000)
+            pointer_stateless++;
+            if(pointer_stateless > 4) clearInterval(timerStateless.current);
+        },1000)
     },[matrix, pointer_stateless, row_stateless])
 
     useEffect(() => {

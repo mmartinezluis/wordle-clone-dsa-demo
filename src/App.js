@@ -13,7 +13,7 @@ export default function App() {
       <Routes>
         <Route path="/statefull" element={<StatefullBoard />} />
         <Route path="/stateless" element={<StatelessBoard />} />
-        <Route path="/home" element={<Home />}/>
+        <Route path="/" element={<Home />}/>
       </Routes>
       {/* </header> */}
     </div>
@@ -26,7 +26,7 @@ function Navbar() {
     <div style={{ display: 'flex', justifyContent: 'space-evenly', margin: '10px 0 40px'}}>
       <NavLink to="/statefull">Using state variables</NavLink>
       <NavLink to="/stateless">Using stateless variables</NavLink>
-      <NavLink to="/home">Home</NavLink>
+      <NavLink to="/">Home</NavLink>
     </div>
   )
 }

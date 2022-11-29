@@ -34,7 +34,7 @@ export default function TimerHook({
             console.log(pointer_stateless)
             matrix[row_stateless][pointer_stateless] = ALPHABET[pointer_stateless];
             pointer_stateless++
-        },1000)
+        },2000)
     },[matrix, pointer_stateless, row_stateless])
 
     useEffect(() => {
@@ -46,7 +46,7 @@ export default function TimerHook({
         return () => {
             if(pointer > 3) clearInterval(timerId.current);
         }
-    },[updateStatefull, pointer, matrix, mode, setBoard, setPointer]);
+    },[updateStatefull, pointer, mode, setBoard, setPointer]);
 
     useEffect(() => {
         if(pointer_stateless === 0) {
@@ -55,9 +55,10 @@ export default function TimerHook({
             } 
         }
         return () => {
-            if(pointer_stateless > 3) clearInterval(timerStateless.current);
+            // if(pointer_stateless > 3) clearInterval(timerStateless.current);
+            clearInterval(timerStateless.current);
         }
-    },[updateStateless, matrix, mode, pointer_stateless, row_stateless]);
+    },[updateStateless, matrix, mode, pointer_stateless]);
 
     return <></>
 }

@@ -8,7 +8,7 @@ let pointer_stateless = 0;
 
 function StatelessBoard(){
 
-  const [handle, setHandle] = useState(null);
+  const [handle, setHandle] = useState({});
 
   const handleKeyDown = useCallback((e) => {
     console.log(e.key)
@@ -27,6 +27,7 @@ function StatelessBoard(){
     };
   }, [handleKeyDown]);
 
+  if(!handle) return null;
   return (
     <>
         <div className='matrix'>

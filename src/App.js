@@ -1,4 +1,4 @@
-import { Profiler, useRef } from 'react';
+import { Profiler, useRef, useState } from 'react';
 import './App.css';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import StatefullBoard from './components/statefullBoard';
@@ -11,9 +11,9 @@ export default function App() {
 
   const renderCount = useRef(0);
   const averageRenderTime= useRef(0);
-  const testsActive = useRef(false);
+  const [testsActive, setTestsActive] = useState(false);
   const currentSettings = useRef(testSettings.grid.normal);
-  const currentOption = useRef("normal");
+  const testOptions = useRef([]);
 
   const renderCallback = (
     id,
@@ -43,57 +43,105 @@ export default function App() {
   const resetTests = () => {
     renderCount.current = 0;
     averageRenderTime.current = 0;
+    setTestsActive(() => true);
+  }
+
+  const turnOffTests = () => {
+    setTestsActive(() => false)
   }
 
   const runTests = () => {
     testsActive.current = true;
   }
+  
+  const handleCheckbox = (e) => {
+    console.log(e.target.checked)
+    e.target.checked ? resetTests() : turnOffTests();
+  }
+
+  const handleButtonChange = (e) => {
+    testOptions.current.forEach(input => {
+      if(input.value === e.target.value) {
+        e.target.checked = true;
+        currentSettings.current = testSettings.grid[e.target.value]
+      } else input.checked = false;
+    })
+    console.log(currentSettings.current)
+  }
+
+  const testsPanel =
+      <div className='tests-panel'>
+        <label>
+        <input 
+          type="radio" 
+          value="normal" 
+          onChange={handleButtonChange}
+          ref={(el) => testOptions.current[0] = el}
+        />Normal grid (6X5) (30 rerenders)
+        </label>
+        <label>
+        <input 
+          type="radio" 
+          value="medium"
+          onChange={handleButtonChange}
+          ref={(el) => testOptions.current[1] = el}
+        />Medium grid (10X10) (100 rerenders)
+        </label>
+        <label>
+        <input 
+          type="radio" 
+          value="large" 
+          onChange={handleButtonChange}
+          ref={(el) => testOptions.current[2] = el}
+        />Large grid (20x10) (200 rerenders)
+        </label>
+      </div>
+
+  const testsCheckbox =
+    <label>
+      <input 
+        type="checkbox"
+        onChange={handleCheckbox}
+      />Activate Tests
+    </label>
 
   return (
     <div className="App">
       <Navbar />
-      <div>
-        <button>Activate</button>
-        <div>
-          <input 
-            type="radio" 
-            value="normal" 
-            checked={currentOption.current === "normal"} 
-            onChange={() => currentOption.current = "normal"}
-          />Normal grid (6X5) (30 rerenders)
-          <input 
-            type="radio" 
-            value="medium"
-            checked={currentOption.current === "medium"} 
-            onChange={() => currentOption.current = "medium"}
-          />Medium grid (10X10) (100 rerenders)
-          <input 
-            type="radio" 
-            value="large" 
-            checked={currentOption.current === "large"} 
-            onChange={() => currentOption.current = "large"}
-          />Large grid (20x10) (200 rerenders)
-        </div>
-      </div>
+      Mode: {testsActive ? "Test" : "Normal"}
       {testsActive ? (
-        <Routes>
-          <Route path="/statefull" element={<Profiler id="STATEFULL board component" onRender={renderCallback}>
-                                              <StatefullBoard />
-                                            </Profiler>
-                                            }/>
-          <Route path="/stateless" element={<Profiler id="STATELESS board component" onRender={renderCallback}> 
-                                              <StatelessBoard 
-                                                rowSettings = {currentSettings.current[0]}
-                                                colSettings = {currentSettings.current[1]}
-                                              />
-                                            </Profiler>} />
-          <Route path="/" element={<Home />}/>
-        </Routes>
-      ): (
+        <>
+          <Routes>
+            <Route path="/statefull" element={<Profiler id="STATEFULL board component" onRender={renderCallback}>
+                                                <StatefullBoard />
+                                              </Profiler>
+                                              }/>
+            <Route path="/stateless" element={<Profiler id="STATELESS board component" onRender={renderCallback}> 
+                                                <StatelessBoard 
+                                                  rowSettings = {() => currentSettings.current[0]}
+                                                  colSettings = {() => currentSettings.current[1]}
+                                                  testsActive = {testsActive}
+                                                />
+                                              </Profiler>} />
+            <Route path="/" element={
+                <>
+                  {testsCheckbox}
+                  <Home />
+                  {testsPanel}
+                </> 
+            }/>
+          </Routes>
+        </>
+      ) : (
         <Routes>
           <Route path="/statefull" element={<StatefullBoard />}/>
           <Route path="/stateless" element={<StatelessBoard />}/>
-          <Route path="/" element={<Home />}/>
+          <Route path="/" element={
+            <>
+              {testsCheckbox}
+              <Home />
+            </>
+          }/>
         </Routes>
       )}
     </div>

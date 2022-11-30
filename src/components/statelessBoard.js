@@ -23,8 +23,9 @@ function StatelessBoard(props){
         if(!page.current) {
             page.current = document;
             page.current.addEventListener('keydown', handleKeyDown, true);
-            matrix = BOARD(props.rowSettings, props.colSettings);
-            queue = QUEUE(props.rowSettings);
+            matrix = BOARD(props.testsActive && props.rowSettings(),props.testsActive && props.colSettings());
+            console.log(props)
+            queue = QUEUE(props.testsActive && props.rowSettings());
             pointer_stateless = 0;
             setHandle({})
         }
@@ -32,24 +33,24 @@ function StatelessBoard(props){
             page.current.removeEventListener('keydown', handleKeyDown, true);
             page.current = null;
         }
-    }, [handleKeyDown, props.rowSettings, props.colSettings]);
+    }, [handleKeyDown, props]);
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            console.log(pointer_stateless)
-            if(pointer_stateless > ((props.colSettings -1) || 4) ) {
-                queue.shift();
-                pointer_stateless = 0;
-                if(!queue.length) {
-                    clearInterval(intervalId);
-                    return;
-                }
-            }
-            matrix[queue[0]][pointer_stateless] = ALPHABET[pointer_stateless];
-            pointer_stateless++;
-            setHandle({});
-        },500)
-        return () => clearInterval(intervalId);
+        // const intervalId = setInterval(() => {
+        //     console.log(pointer_stateless)
+        //     if(pointer_stateless > ((props.colSettings -1) || 4) ) {
+        //         queue.shift();
+        //         pointer_stateless = 0;
+        //         if(!queue.length) {
+        //             clearInterval(intervalId);
+        //             return;
+        //         }
+        //     }
+        //     matrix[queue[0]][pointer_stateless] = ALPHABET[pointer_stateless];
+        //     pointer_stateless++;
+        //     setHandle({});
+        // },500)
+        // return () => clearInterval(intervalId);
     },[props.colSettings]);
 
     if(!handle || !page.current) return null;

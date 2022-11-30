@@ -63,3 +63,11 @@
   align-items: center;
   font-weight: 500;
 }
+
+.tests-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-grow: 2;
+}

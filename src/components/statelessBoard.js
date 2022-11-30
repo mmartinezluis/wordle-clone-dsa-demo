@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import { ALPHABET, BOARD, QUEUE } from '../tools/tools';
 
-let matrix
-let queue 
-let pointer_stateless
+let matrix,
+    queue,
+    pointer_stateless
 
 function StatelessBoard(props){
 
@@ -11,7 +11,6 @@ function StatelessBoard(props){
     const page = useRef(null);
     
     const handleKeyDown = useCallback((e) => {
-        console.log(e.key)
         if(pointer_stateless >= 0 && pointer_stateless < (props.colSettings || 5)) {
             matrix[queue[0]][pointer_stateless] = e.key;
             pointer_stateless++;
@@ -22,12 +21,11 @@ function StatelessBoard(props){
     useEffect(() => {
         if(!page.current) {
             page.current = document;
-            page.current.addEventListener('keydown', handleKeyDown, true);
+            if(!props.testsActive) page.current.addEventListener('keydown', handleKeyDown, true);
             matrix = BOARD(props.testsActive && props.rowSettings(),props.testsActive && props.colSettings());
-            console.log(props)
             queue = QUEUE(props.testsActive && props.rowSettings());
             pointer_stateless = 0;
-            setHandle({})
+            setHandle({});
         }
         return () => {
             page.current.removeEventListener('keydown', handleKeyDown, true);
@@ -36,22 +34,23 @@ function StatelessBoard(props){
     }, [handleKeyDown, props]);
 
     useEffect(() => {
-        // const intervalId = setInterval(() => {
-        //     console.log(pointer_stateless)
-        //     if(pointer_stateless > ((props.colSettings -1) || 4) ) {
-        //         queue.shift();
-        //         pointer_stateless = 0;
-        //         if(!queue.length) {
-        //             clearInterval(intervalId);
-        //             return;
-        //         }
-        //     }
-        //     matrix[queue[0]][pointer_stateless] = ALPHABET[pointer_stateless];
-        //     pointer_stateless++;
-        //     setHandle({});
-        // },500)
-        // return () => clearInterval(intervalId);
-    },[props.colSettings]);
+        if(!props.testsActive) return;
+        const intervalId = setInterval(() => {
+            console.log(pointer_stateless)
+            if(pointer_stateless > ((props.colSettings -1) || 4) ) {
+                queue.shift();
+                pointer_stateless = 0;
+                if(!queue.length) {
+                    clearInterval(intervalId);
+                    return;
+                }
+            }
+            matrix[queue[0]][pointer_stateless] = ALPHABET[pointer_stateless];
+            pointer_stateless++;
+            setHandle({});
+        },500)
+        return () => clearInterval(intervalId);
+    },[props.colSettings, props.testsActive]);
 
     if(!handle || !page.current) return null;
 

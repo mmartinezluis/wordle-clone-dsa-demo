@@ -34,7 +34,7 @@ export default function App() {
     // skip the render time for the component mount phase
     if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + baseTime;
     if(renderCount.current - 1 === gridSize) {
-      console.log(`Average rerender time for 100 rerenders: ${averageRenderTime.current/gridSize}ms`);
+      console.log(`Average rerender time for ${gridSize} rerenders: ${averageRenderTime.current/gridSize}ms`);
     }
     renderCount.current = renderCount.current + 1;
     console.log(averageRenderTime)
@@ -48,10 +48,6 @@ export default function App() {
 
   const turnOffTests = () => {
     setTestsActive(() => false)
-  }
-
-  const runTests = () => {
-    testsActive.current = true;
   }
   
   const handleCheckbox = (e) => {

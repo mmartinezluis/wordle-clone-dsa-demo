@@ -1,4 +1,3 @@
-
 const testSettings = {
     grid: {
         normal: [6,5],

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import { ALPHABET, BOARD } from '../tools/tools';
+import { ALPHABET, BOARD, QUEUE } from '../tools/tools';
 
-let queue = [0,1,2,3,4,5];
+let queue = QUEUE();
 
 function StatefullBoard() {
 
@@ -29,14 +29,22 @@ function StatefullBoard() {
         console.log('i run')
         const intervalId = setInterval(() => {
             pointerRef.current = pointerRef.current + 1;
+            if(pointerRef.current > 10) {
+                pointerRef.current = 1;
+                queue.shift();
+                if(!queue.length) {
+                    clearInterval(intervalId);
+                    return
+                }
+            }
             setBoard((prevBoard) => {
                 const clone = structuredClone(prevBoard);
                 clone[queue[0]][pointerRef.current -1] = ALPHABET[pointerRef.current -1];
                 console.log(pointerRef.current -1)
                 return clone;
             });
-            if(pointerRef.current > 9) clearInterval(intervalId);
-        },1000)
+            
+        },500)
         return () => clearInterval(intervalId);
     }, []);
     

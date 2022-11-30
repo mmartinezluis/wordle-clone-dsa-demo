@@ -1,15 +1,15 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import { ALPHABET, BOARD } from '../tools/tools';
+import { ALPHABET, BOARD, QUEUE } from '../tools/tools';
 
-let matrix = BOARD();
-let queue = [0,1,2,3,4,5,6]
+let matrix
+let queue 
 let pointer_stateless = 0;
 
 function StatelessBoard(){
 
-    const [handle, setHandle] = useState({});
-    const timerStateless = useRef(1);
-
+    const [handle, setHandle] = useState(null);
+    const page = useRef(null);
+    
     const handleKeyDown = useCallback((e) => {
         console.log(e.key)
         if(pointer_stateless >= 0 && pointer_stateless < 5) {
@@ -20,26 +20,36 @@ function StatelessBoard(){
     },[])
 
     useEffect(() => {
-        document.addEventListener('keydown', handleKeyDown, true);
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown, true);
-        };
+        if(!page.current) {
+            page.current =document
+            page.current.addEventListener('keydown', handleKeyDown, true);
+            matrix = BOARD();
+            queue = QUEUE();
+            setHandle({})
+        }
+        return () => page.current.removeEventListener('keydown', handleKeyDown, true);
     }, [handleKeyDown]);
 
     useEffect(() => {
-        if(pointer_stateless === 0) {
-            timerStateless.current = setInterval(() => {
-                console.log(pointer_stateless)
-                matrix[queue[0]][pointer_stateless] = ALPHABET[pointer_stateless];
-                setHandle({});
-                pointer_stateless++;
-                if(pointer_stateless > 9) clearInterval(timerStateless.current);
-            },1000)
-        }
-        return () => clearInterval(timerStateless.current);
+        if(!page.current) return
+        const intervalId = setInterval(() => {
+            console.log(pointer_stateless)
+            if(pointer_stateless > 9) {
+                queue.shift();
+                pointer_stateless = 0;
+                if(!queue.length) {
+                    clearInterval(intervalId);
+                    return;
+                }
+            }
+            matrix[queue[0]][pointer_stateless] = ALPHABET[pointer_stateless];
+            pointer_stateless++;
+            setHandle({});
+        },500)
+        return () => clearInterval(intervalId);
     },[]);
 
-    if(!handle) return null;
+    if(!handle || !page.current) return null;
 
     return (
         <div className='matrix'>
@@ -47,11 +57,11 @@ function StatelessBoard(){
                 return (
                 <div className='row' key={rowIndex}>
                     {row.map((col, colIndex) => {
-                    return (
-                        <div className='cell' key={parseInt("" + rowIndex + colIndex)}>
-                        {col}
-                        </div>
-                    )
+                        return (
+                            <div className='cell' key={parseInt("" + rowIndex + colIndex)}>
+                                {col}
+                            </div>
+                        )
                     })}
                 </div>
                 )

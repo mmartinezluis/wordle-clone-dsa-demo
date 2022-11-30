@@ -3,38 +3,41 @@ import { ALPHABET, BOARD, QUEUE } from '../tools/tools';
 
 let matrix
 let queue 
-let pointer_stateless = 0;
+let pointer_stateless
 
-function StatelessBoard(){
+function StatelessBoard(props){
 
     const [handle, setHandle] = useState(null);
     const page = useRef(null);
     
     const handleKeyDown = useCallback((e) => {
         console.log(e.key)
-        if(pointer_stateless >= 0 && pointer_stateless < 5) {
+        if(pointer_stateless >= 0 && pointer_stateless < (props.colSettings || 5)) {
             matrix[queue[0]][pointer_stateless] = e.key;
             pointer_stateless++;
         } else pointer_stateless = 0;
         setHandle({});
-    },[])
+    },[props.colSettings])
 
     useEffect(() => {
         if(!page.current) {
-            page.current =document
+            page.current = document;
             page.current.addEventListener('keydown', handleKeyDown, true);
-            matrix = BOARD();
-            queue = QUEUE();
+            matrix = BOARD(props.rowSettings, props.colSettings);
+            queue = QUEUE(props.rowSettings);
+            pointer_stateless = 0;
             setHandle({})
         }
-        return () => page.current.removeEventListener('keydown', handleKeyDown, true);
-    }, [handleKeyDown]);
+        return () => {
+            page.current.removeEventListener('keydown', handleKeyDown, true);
+            page.current = null;
+        }
+    }, [handleKeyDown, props.rowSettings, props.colSettings]);
 
     useEffect(() => {
-        if(!page.current) return
         const intervalId = setInterval(() => {
             console.log(pointer_stateless)
-            if(pointer_stateless > 9) {
+            if(pointer_stateless > ((props.colSettings -1) || 4) ) {
                 queue.shift();
                 pointer_stateless = 0;
                 if(!queue.length) {
@@ -47,7 +50,7 @@ function StatelessBoard(){
             setHandle({});
         },500)
         return () => clearInterval(intervalId);
-    },[]);
+    },[props.colSettings]);
 
     if(!handle || !page.current) return null;
 

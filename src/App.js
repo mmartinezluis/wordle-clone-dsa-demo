@@ -1,13 +1,18 @@
+import { Profiler, useRef } from 'react';
 import './App.css';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import StatefullBoard from './components/statefullBoard';
 import StatelessBoard from './components/statelessBoard';
 import Home from './components/Home';
-import { Profiler } from 'react';
+import { testSettings } from './performanceTests/config';
 
-let renderCount = 0;
-let averageRenderTime = 0;
+
 export default function App() {
+
+  const renderCount = useRef(0);
+  const averageRenderTime= useRef(0);
+  const testsActive = useRef(false);
+  const currentSettings = useRef(testSettings.grid.normal);
 
   const renderCallback = (
     id,
@@ -23,39 +28,53 @@ export default function App() {
     console.log(`Start time: ${startTime}`)
     console.log(`Coomit time: ${commitTime}`)
 
-    renderCount++
-    averageRenderTime += baseTime;
-    // substract the component mount time from the first render
-    if(renderCount === 1) averageRenderTime -= baseTime;
-    if(renderCount === 201) {
-      console.log(`Average rerender time for 100 rerenders: ${averageRenderTime/200}ms`);
+    const gridSize = currentSettings.current[0]*currentSettings.current[1];
+
+    // skip the render time for the component mount phase
+    if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + baseTime;
+    if(renderCount.current - 1 === gridSize) {
+      console.log(`Average rerender time for 100 rerenders: ${averageRenderTime.current/gridSize}ms`);
     }
+    renderCount.current = renderCount.current + 1;
+    console.log(averageRenderTime)
+  }
+
+  const resetTests = () => {
+    renderCount.current = 0;
+    averageRenderTime.current = 0;
+  }
+
+  const runTests = () => {
+    testsActive.current = true;
   }
 
   return (
     <div className="App">
       <Navbar />
-      {/* <Routes>
-        <Route path="/statefull" element={<StatefullBoard />}/>
-        <Route path="/stateless" element={<StatelessBoard />}/>
-        <Route path="/" element={<Home />}/>
-      </Routes> */}
-
-      {/* For component analytics */}
-      <Routes>
-        <Route path="/statefull" element={<Profiler id="STATEFULL board component" onRender={renderCallback}>
-                                            <StatefullBoard />
-                                          </Profiler>
-                                          }/>
-        <Route path="/stateless" element={<Profiler id="STATELESS board component" onRender={renderCallback}> 
-                                            <StatelessBoard />
-                                          </Profiler>} />
-        <Route path="/" element={<Home />}/>
-      </Routes>
+      {testsActive ? (
+        <Routes>
+          <Route path="/statefull" element={<Profiler id="STATEFULL board component" onRender={renderCallback}>
+                                              <StatefullBoard />
+                                            </Profiler>
+                                            }/>
+          <Route path="/stateless" element={<Profiler id="STATELESS board component" onRender={renderCallback}> 
+                                              <StatelessBoard 
+                                                rowSettings = {currentSettings.current[0]}
+                                                colSettings = {currentSettings.current[1]}
+                                              />
+                                            </Profiler>} />
+          <Route path="/" element={<Home />}/>
+        </Routes>
+      ): (
+        <Routes>
+          <Route path="/statefull" element={<StatefullBoard />}/>
+          <Route path="/stateless" element={<StatelessBoard />}/>
+          <Route path="/" element={<Home />}/>
+        </Routes>
+      )}
     </div>
   );
 }
-
 
 function Navbar() {
   return (

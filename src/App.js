@@ -13,6 +13,7 @@ export default function App() {
   const averageRenderTime= useRef(0);
   const testsActive = useRef(false);
   const currentSettings = useRef(testSettings.grid.normal);
+  const currentOption = useRef("normal");
 
   const renderCallback = (
     id,
@@ -51,6 +52,29 @@ export default function App() {
   return (
     <div className="App">
       <Navbar />
+      <div>
+        <button>Activate</button>
+        <div>
+          <input 
+            type="radio" 
+            value="normal" 
+            checked={currentOption.current === "normal"} 
+            onChange={() => currentOption.current = "normal"}
+          />Normal grid (6X5) (30 rerenders)
+          <input 
+            type="radio" 
+            value="medium"
+            checked={currentOption.current === "medium"} 
+            onChange={() => currentOption.current = "medium"}
+          />Medium grid (10X10) (100 rerenders)
+          <input 
+            type="radio" 
+            value="large" 
+            checked={currentOption.current === "large"} 
+            onChange={() => currentOption.current = "large"}
+          />Large grid (20x10) (200 rerenders)
+        </div>
+      </div>
       {testsActive ? (
         <Routes>
           <Route path="/statefull" element={<Profiler id="STATEFULL board component" onRender={renderCallback}>

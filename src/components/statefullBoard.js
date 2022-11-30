@@ -1,41 +1,43 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import { ALPHABET, BOARD } from '../tools/tools';
 
-let row = 0;
+let queue = [0,1,2,3,4,5];
 
 function StatefullBoard() {
 
-    const pointer = useRef(0);
+    const [pointer, setPointer] = useState(0)
+    const pointerRef = useRef(0);
     const [board, setBoard ] = useState(BOARD());
-    const timerId = useRef(11);
-
+    
     const onKeyDown = useCallback ((e) => {
       console.log(e.key)
-      if(pointer.current >= 0 && pointer.current < 5) {
-        const clone = [...board];
-        clone[row][pointer.current] = e.key;
-        pointer.current = pointer.current + 1;
+      if(pointer >= 0 && pointer < 10) {
+        const clone = structuredClone(board);
+        clone[queue[0]][pointer] = e.key;
         setBoard(clone);
+        setPointer(prev => prev + 1)
       } 
     },[board, pointer])
   
     useEffect(() => {
       document.addEventListener('keydown', onKeyDown, true);
-      return () => {
-        document.removeEventListener('keydown', onKeyDown, true);
-      };
+      return () => document.removeEventListener('keydown', onKeyDown, true);
+      
     },[onKeyDown]);
 
     useEffect(() => { 
-        timerId.current = setInterval(() => {
-            const clone = [...board];
-            console.log(pointer.current)
-            clone[row][pointer.current] = ALPHABET[pointer.current];
-            setBoard(clone);
-            pointer.current = pointer.current + 1;
-            if(pointer.current > 4) clearInterval(timerId.current);
+        console.log('i run')
+        const intervalId = setInterval(() => {
+            pointerRef.current = pointerRef.current + 1;
+            setBoard((prevBoard) => {
+                const clone = structuredClone(prevBoard);
+                clone[queue[0]][pointerRef.current -1] = ALPHABET[pointerRef.current -1];
+                console.log(pointerRef.current -1)
+                return clone;
+            });
+            if(pointerRef.current > 9) clearInterval(intervalId);
         },1000)
-        return () => clearInterval(timerId.current);
+        return () => clearInterval(intervalId);
     }, []);
     
     return (

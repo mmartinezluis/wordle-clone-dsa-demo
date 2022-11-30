@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import { ALPHABET, BOARD } from '../tools/tools';
 
 let matrix = BOARD();
-let row_stateless = 0
+let queue = [0,1,2,3,4,5,6]
 let pointer_stateless = 0;
 
 function StatelessBoard(){
@@ -13,7 +13,7 @@ function StatelessBoard(){
     const handleKeyDown = useCallback((e) => {
         console.log(e.key)
         if(pointer_stateless >= 0 && pointer_stateless < 5) {
-            matrix[row_stateless][pointer_stateless] = e.key;
+            matrix[queue[0]][pointer_stateless] = e.key;
             pointer_stateless++;
         } else pointer_stateless = 0;
         setHandle({});
@@ -30,10 +30,10 @@ function StatelessBoard(){
         if(pointer_stateless === 0) {
             timerStateless.current = setInterval(() => {
                 console.log(pointer_stateless)
-                matrix[row_stateless][pointer_stateless] = ALPHABET[pointer_stateless];
+                matrix[queue[0]][pointer_stateless] = ALPHABET[pointer_stateless];
                 setHandle({});
                 pointer_stateless++;
-                if(pointer_stateless > 4) clearInterval(timerStateless.current);
+                if(pointer_stateless > 9) clearInterval(timerStateless.current);
             },1000)
         }
         return () => clearInterval(timerStateless.current);

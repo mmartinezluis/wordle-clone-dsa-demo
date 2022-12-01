@@ -11,7 +11,7 @@ function StatelessBoard({rowSettings, colSettings, testsActive}){
     const page = useRef(null);
     
     const handleKeyDown = useCallback((e) => {
-        if(pointer_stateless >= 0 && pointer_stateless < (colSettings() || 5)) {
+        if(pointer_stateless >= 0 && pointer_stateless < (colSettings || 5)) {
             matrix[queue[0]][pointer_stateless] = e.key;
             pointer_stateless++;
         } else pointer_stateless = 0;
@@ -22,8 +22,8 @@ function StatelessBoard({rowSettings, colSettings, testsActive}){
         if(!page.current) {
             page.current = document;
             if(!testsActive) page.current.addEventListener('keydown', handleKeyDown, true);
-            matrix = BOARD(testsActive && rowSettings(), testsActive && colSettings());
-            queue = QUEUE(testsActive && rowSettings());
+            matrix = BOARD(testsActive && rowSettings, testsActive && colSettings);
+            queue = QUEUE(testsActive && rowSettings);
             pointer_stateless = 0;
             setHandle({});
         }
@@ -37,7 +37,7 @@ function StatelessBoard({rowSettings, colSettings, testsActive}){
         if(!testsActive) return;
         const intervalId = setInterval(() => {
             console.log(pointer_stateless)
-            if(pointer_stateless > ((colSettings() -1) || 4) ) {
+            if(pointer_stateless > ((colSettings -1) || 4) ) {
                 queue.shift();
                 pointer_stateless = 0;
                 if(!queue.length) {

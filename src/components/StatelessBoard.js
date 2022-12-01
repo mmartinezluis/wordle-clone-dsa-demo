@@ -22,8 +22,8 @@ function StatelessBoard({rowSettings, colSettings, testsActive}){
         if(!page.current) {
             page.current = document;
             if(!testsActive) page.current.addEventListener('keydown', handleKeyDown, true);
-            matrix = BOARD(testsActive && rowSettings, testsActive && colSettings);
-            queue = QUEUE(testsActive && rowSettings);
+            matrix = BOARD(rowSettings,colSettings);
+            queue = QUEUE(rowSettings);
             pointer_stateless = 0;
             setHandle({});
         }

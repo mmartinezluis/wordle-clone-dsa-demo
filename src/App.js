@@ -1,7 +1,7 @@
 import { Profiler, useCallback, useRef, useState } from 'react';
 import './App.css';
 import { NavLink, Route, Routes } from 'react-router-dom';
-import StatefullBoard from './components/StatefullBoard';
+import StatefulBoard from './components/StatefulBoard';
 import StatelessBoard from './components/StatelessBoard';
 import TestsInterface from './components/TestsInterface';
 import { testSettings } from './performanceTests/config';
@@ -142,7 +142,11 @@ export default function App() {
         <>
           <Routes>
             <Route path="/statefull" element={<Profiler id="STATEFULL board component" onRender={renderCallback}>
-                                                <StatefullBoard />
+                                                <StatefulBoard 
+                                                  rowSettings = {currentSettings[0]}
+                                                  colSettings = {currentSettings[1]}
+                                                  testsActive = {testsActive}
+                                                />
                                               </Profiler>
                                               }/>
             <Route path="/stateless" element={<Profiler id="STATELESS board component" onRender={renderCallback}> 
@@ -167,7 +171,7 @@ export default function App() {
         </>
       ) : (
         <Routes>
-          <Route path="/statefull" element={<StatefullBoard />}/>
+          <Route path="/statefull" element={<StatefulBoard />}/>
           <Route path="/stateless" element={<StatelessBoard />}/>
           <Route path="/" element={
             <>

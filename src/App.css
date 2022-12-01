@@ -131,7 +131,8 @@ label[for=switch]:after {
 }
 
 input#switch:checked + label[for=switch] {
-	background: #bada55;
+	/* background: #bada55; */
+	background: #1e88e5;
 }
 
 input#switch:checked + label[for=switch]:after {
@@ -226,4 +227,14 @@ input[type=radio]:checked + label {
     opacity: 1;
     -webkit-transform: scale(1);
     transform: scale(1);
+}
+
+
+
+.test-result {
+  padding: 10px 15px 15px;
+  margin: 10px 0;
+  background-color: #61dafb;
+  color: black;
+  border-radius: 5px;
 }

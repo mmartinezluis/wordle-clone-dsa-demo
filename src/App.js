@@ -15,7 +15,7 @@ export default function App() {
   const [currentSettings, setCurrentSettings] = useState(testSettings.grid.standard);
   const [testOption,setTestOption] = useState("standard");
   const [checked, setChecked] = useState(false);
-  const testResult = useRef("");
+  const [testResult,setTestResult] = useState("");
 
   const gridSize = currentSettings[0]*currentSettings[1];
 
@@ -36,8 +36,8 @@ export default function App() {
     // skip the render time for the component mount phase
     if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + baseTime;
     if((location.pathname === "/stateful" && renderCount.current === gridSize) || renderCount.current - 1 === gridSize) {
-      testResult.current = `Average rerender time for ${gridSize} rerenders: ${averageRenderTime.current/gridSize}ms`
-      console.log(`Average rerender time for ${gridSize} rerenders: ${averageRenderTime.current/gridSize}ms`);
+      setTestResult(`Average rerender time for ${gridSize} rerenders: ${(averageRenderTime.current/gridSize).toFixed(4)}ms`)
+      console.log(`Average rerender time for ${gridSize} rerenders: ${(averageRenderTime.current/gridSize).toFixed(4)}ms`);
     }
     renderCount.current = renderCount.current + 1;
     console.log(averageRenderTime)
@@ -122,7 +122,11 @@ export default function App() {
   return (
     <div className="App">      
       <Navbar />
-      Mode: {testsActive ? `Test | Grid: ${testOption} (${currentSettings[0]}x${currentSettings[1]}) (${gridSize} rerenders)` : "Normal"}
+      <p>Mode: {testsActive ? `Test | Grid: ${testOption} (${currentSettings[0]}x${currentSettings[1]}) (${gridSize} rerenders)` : "Normal"}</p>
+      {testResult.length ?
+        <div className='test-result'><p>Test Result:</p><p>{testResult}</p></div>
+        : null
+      }
       {testsActive ? (
         <>
           <Routes>
@@ -131,6 +135,8 @@ export default function App() {
                                                   rowSettings = {currentSettings[0]}
                                                   colSettings = {currentSettings[1]}
                                                   testsActive = {testsActive}
+                                                  testResult = {testResult}
+                                                  setTestResult = {setTestResult}
                                                 />
                                               </Profiler>
                                               }/>
@@ -139,6 +145,8 @@ export default function App() {
                                                   rowSettings = {currentSettings[0]}
                                                   colSettings = {currentSettings[1]}
                                                   testsActive = {testsActive}
+                                                  testResult = {testResult}
+                                                  setTestResult = {setTestResult}
                                                 />
                                               </Profiler>} />
             <Route path="/" element={

@@ -14,6 +14,8 @@ export default function App() {
   const [testsActive, setTestsActive] = useState(false);
   const [currentSettings, setCurrentSettings] = useState(testSettings.grid.standard);
   const [testOption,setTestOption] = useState("standard");
+  const [checked, setChecked] = useState(false);
+  const testResult = useRef("");
 
   const gridSize = currentSettings[0]*currentSettings[1];
 
@@ -31,10 +33,10 @@ export default function App() {
     console.log(`Start time: ${startTime}`)
     console.log(`Coomit time: ${commitTime}`)
 
-    // const gridSize = currentSettings[0]*currentSettings[1];
     // skip the render time for the component mount phase
     if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + baseTime;
     if((location.pathname === "/stateful" && renderCount.current === gridSize) || renderCount.current - 1 === gridSize) {
+      testResult.current = `Average rerender time for ${gridSize} rerenders: ${averageRenderTime.current/gridSize}ms`
       console.log(`Average rerender time for ${gridSize} rerenders: ${averageRenderTime.current/gridSize}ms`);
     }
     renderCount.current = renderCount.current + 1;
@@ -53,6 +55,7 @@ export default function App() {
   
   const handleCheckbox = (e) => {
     e.target.checked ? resetTests() : turnOffTests();
+    setChecked(!checked);
   }
 
   const handleButtonChange = (e) => {
@@ -64,42 +67,60 @@ export default function App() {
 
   const testsPanel =
       <div className='tests-panel'>
-        <label>
+        <div>
         <input 
           type="radio" 
           value="standard" 
+          id='standard'
           checked={testOption === "standard"}
           onChange={handleButtonChange}
-        />Standard grid (6X5) (30 rerenders)
+        />
+        <label htmlFor='standard'>
+          Standard grid (6X5) (30 rerenders)
         </label>
-        <label>
+        </div>
+        <div>
         <input 
           type="radio" 
           value="medium"
+          id='medium'
           checked={testOption === "medium"}
           onChange={handleButtonChange}
-        />Medium grid (10X10) (100 rerenders)
+        />
+        <label htmlFor='medium'>
+          Medium grid (10X10) (100 rerenders)
         </label>
-        <label>
+        </div>
+        <div>
         <input 
           type="radio" 
           value="large" 
+          id='large'
           checked={testOption === "large"}
           onChange={handleButtonChange}
-        />Large grid (20x10) (200 rerenders)
+        />
+        <label htmlFor='large'>
+          Large grid (20x10) (200 rerenders)
         </label>
+        </div>
       </div>
 
   const testsCheckbox =
-    <label>
+    <div className='switch-container'>
       <input 
         type="checkbox"
+        id="switch"
+        checked={checked}
         onChange={handleCheckbox}
-      />Activate Tests
-    </label>
+      />
+      <label htmlFor='switch'>
+        Activate Tests
+      </label>
+    </div>
+    
 
   return (
-    <div className="App">
+    <div className="App">      
       <Navbar />
       Mode: {testsActive ? `Test | Grid: ${testOption} (${currentSettings[0]}x${currentSettings[1]}) (${gridSize} rerenders)` : "Normal"}
       {testsActive ? (
@@ -149,10 +170,34 @@ export default function App() {
 
 function Navbar() {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-evenly', margin: '10px 0 40px'}}>
-      <NavLink to="/stateful">Stateful Board</NavLink>
-      <NavLink to="/stateless">Stateless Board</NavLink>
-      <NavLink to="/">Tests Settings</NavLink>
+    <div className='nav'>
+      <NavLink  
+        to="/stateful"
+        style={({ isActive }) => ({
+          color: isActive ? '#fff' : '#545e6f',
+          background: isActive ? '#7600dc' : '#f0f0f0',
+        })}
+      >
+        Stateful Board
+      </NavLink>
+      <NavLink 
+        to="/stateless"
+        style={({ isActive }) => ({
+          color: isActive ? '#fff' : '#545e6f',
+          background: isActive ? '#7600dc' : '#f0f0f0',
+        })}
+      >
+        Stateless Board
+      </NavLink>
+      <NavLink 
+        to="/"
+        style={({ isActive }) => ({
+          color: isActive ? '#fff' : '#545e6f',
+          background: isActive ? '#7600dc' : '#f0f0f0',
+        })}
+      >
+        Tests Settings
+      </NavLink>
     </div>
   )
 }

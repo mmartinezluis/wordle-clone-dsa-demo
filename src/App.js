@@ -1,7 +1,7 @@
 import { Profiler, useRef, useState } from 'react';
 import './App.css';
 import { NavLink, Route, Routes } from 'react-router-dom';
-import StatefullBoard from './components/statefullBoard';
+import StatefullBoard from './components/StatefullBoard';
 import StatelessBoard from './components/StatelessBoard';
 import Home from './components/Home';
 import { testSettings } from './performanceTests/config';

@@ -11,10 +11,17 @@ function StatelessBoard({rowSettings, colSettings, testsActive}){
     const page = useRef(null);
     
     const handleKeyDown = useCallback((e) => {
+        if(!queue.length) return;
+        const index = e.key.toLowerCase().charCodeAt(0) - 97;
+        if(ALPHABET[index] !== e.key.toUpperCase()) return;
         if(pointer_stateless >= 0 && pointer_stateless < (colSettings || 5)) {
-            matrix[queue[0]][pointer_stateless] = e.key;
+            matrix[queue[0]][pointer_stateless] = ALPHABET[index];
             pointer_stateless++;
-        } else pointer_stateless = 0;
+            if(pointer_stateless > ((colSettings -1) || 4) ) {
+                queue.shift();
+                pointer_stateless = 0;
+            }
+        } 
         setHandle({});
     },[colSettings])
 

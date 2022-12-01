@@ -30,7 +30,6 @@ export default function App() {
     console.log(`Coomit time: ${commitTime}`)
 
     const gridSize = currentSettings[0]*currentSettings[1];
-    
     // skip the render time for the component mount phase
     if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + baseTime;
     if((location.pathname === "/stateful" && renderCount.current === gridSize) || renderCount.current - 1 === gridSize) {

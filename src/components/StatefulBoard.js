@@ -1,8 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import { ALPHABET, BOARD, QUEUE } from '../tools/tools';
 
-// let queue = QUEUE();
-
 function StatefulBoard({rowSettings, colSettings, testsActive}) {
 
     const [pointer, setPointer] = useState(0)
@@ -13,9 +11,11 @@ function StatefulBoard({rowSettings, colSettings, testsActive}) {
     const onKeyDown = useCallback ((e) => {
       console.log(e.key)
       if(!queue.current.length) return;
+      const index = e.key.toLowerCase().charCodeAt(0) - 97;
+      if(ALPHABET[index] !== e.key.toUpperCase()) return;
       if(pointer >= 0 && pointer < (colSettings || 5)) {
         const clone = structuredClone(board);
-        clone[queue.current[0]][pointer] = e.key;
+        clone[queue.current[0]][pointer] = ALPHABET[index];
         setBoard(clone);
         setPointer(prev => prev + 1);
         if(pointer + 1 === (colSettings || 5)) {

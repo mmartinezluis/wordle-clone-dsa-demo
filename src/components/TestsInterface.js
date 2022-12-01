@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import logo from '../logo.svg';
 
-function Home({resetTests}) {
+function TestsInterface({resetTests}) {
     useEffect(() => {
       if(resetTests) resetTests();
     },[resetTests])
@@ -22,4 +22,4 @@ function Home({resetTests}) {
       </>
     )
 }
-export default Home;
+export default TestsInterface;

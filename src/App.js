@@ -3,7 +3,7 @@ import './App.css';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import StatefullBoard from './components/StatefullBoard';
 import StatelessBoard from './components/StatelessBoard';
-import Home from './components/Home';
+import TestsInterface from './components/TestsInterface';
 import { testSettings } from './performanceTests/config';
 
 
@@ -124,7 +124,7 @@ export default function App() {
             <Route path="/" element={
                 <>
                   {testsCheckbox}
-                  <Home 
+                  <TestsInterface 
                     resetTests={resetTests}
                   />
                   {testsPanel}
@@ -139,7 +139,7 @@ export default function App() {
           <Route path="/" element={
             <>
               {testsCheckbox}
-              <Home />
+              <TestsInterface />
             </>
           }/>
         </Routes>
@@ -153,7 +153,7 @@ function Navbar() {
     <div style={{ display: 'flex', justifyContent: 'space-evenly', margin: '10px 0 40px'}}>
       <NavLink to="/statefull">Stateful Board</NavLink>
       <NavLink to="/stateless">Stateless Board</NavLink>
-      <NavLink to="/">Home</NavLink>
+      <NavLink to="/">Tests Settings</NavLink>
     </div>
   )
 }

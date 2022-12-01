@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from '../logo.svg';
 
-function Home() {
+function Home({resetTests}) {
+    useEffect(() => {
+      if(resetTests) resetTests();
+    },[resetTests])
     return (
       <>
           <img src={logo} className="App-logo" alt="logo" />

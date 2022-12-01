@@ -5,25 +5,25 @@ let matrix,
     queue,
     pointer_stateless
 
-function StatelessBoard(props){
+function StatelessBoard({rowSettings, colSettings, testsActive}){
 
     const [handle, setHandle] = useState(null);
     const page = useRef(null);
     
     const handleKeyDown = useCallback((e) => {
-        if(pointer_stateless >= 0 && pointer_stateless < (props.colSettings || 5)) {
+        if(pointer_stateless >= 0 && pointer_stateless < (colSettings() || 5)) {
             matrix[queue[0]][pointer_stateless] = e.key;
             pointer_stateless++;
         } else pointer_stateless = 0;
         setHandle({});
-    },[props.colSettings])
+    },[colSettings])
 
     useEffect(() => {
         if(!page.current) {
             page.current = document;
-            if(!props.testsActive) page.current.addEventListener('keydown', handleKeyDown, true);
-            matrix = BOARD(props.testsActive && props.rowSettings(),props.testsActive && props.colSettings());
-            queue = QUEUE(props.testsActive && props.rowSettings());
+            if(!testsActive) page.current.addEventListener('keydown', handleKeyDown, true);
+            matrix = BOARD(testsActive && rowSettings(), testsActive && colSettings());
+            queue = QUEUE(testsActive && rowSettings());
             pointer_stateless = 0;
             setHandle({});
         }
@@ -31,13 +31,13 @@ function StatelessBoard(props){
             page.current.removeEventListener('keydown', handleKeyDown, true);
             page.current = null;
         }
-    }, [handleKeyDown, props]);
+    }, [handleKeyDown, testsActive, rowSettings, colSettings]);
 
     useEffect(() => {
-        if(!props.testsActive) return;
+        if(!testsActive) return;
         const intervalId = setInterval(() => {
             console.log(pointer_stateless)
-            if(pointer_stateless > ((props.colSettings -1) || 4) ) {
+            if(pointer_stateless > ((colSettings() -1) || 4) ) {
                 queue.shift();
                 pointer_stateless = 0;
                 if(!queue.length) {
@@ -50,7 +50,7 @@ function StatelessBoard(props){
             setHandle({});
         },500)
         return () => clearInterval(intervalId);
-    },[props.colSettings, props.testsActive]);
+    },[testsActive, colSettings]);
 
     if(!handle || !page.current) return null;
 

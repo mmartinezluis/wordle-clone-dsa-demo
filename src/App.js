@@ -1,4 +1,4 @@
-import { Profiler, useRef, useState } from 'react';
+import { Profiler, useCallback, useRef, useState } from 'react';
 import './App.css';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import StatefullBoard from './components/StatefullBoard';
@@ -30,7 +30,7 @@ export default function App() {
     console.log(`Coomit time: ${commitTime}`)
 
     const gridSize = currentSettings.current[0]*currentSettings.current[1];
-
+    
     // skip the render time for the component mount phase
     if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + baseTime;
     if(renderCount.current - 1 === gridSize) {
@@ -40,11 +40,11 @@ export default function App() {
     console.log(averageRenderTime)
   }
 
-  const resetTests = () => {
+  const resetTests = useCallback(() => {
     renderCount.current = 0;
     averageRenderTime.current = 0;
     setTestsActive(() => true);
-  }
+  },[])
 
   const turnOffTests = () => {
     setTestsActive(() => false)
@@ -65,6 +65,8 @@ export default function App() {
     console.log(currentSettings.current)
   }
 
+  console.log(testsActive)
+
   const testsPanel =
       <div className='tests-panel'>
         <label>
@@ -73,7 +75,7 @@ export default function App() {
           value="normal" 
           onChange={handleButtonChange}
           ref={(el) => testOptions.current[0] = el}
-        />Normal grid (6X5) (30 rerenders)
+        />Standard grid (6X5) (30 rerenders)
         </label>
         <label>
         <input 
@@ -122,7 +124,9 @@ export default function App() {
             <Route path="/" element={
                 <>
                   {testsCheckbox}
-                  <Home />
+                  <Home 
+                    resetTests={resetTests}
+                  />
                   {testsPanel}
                 </> 
             }/>
@@ -147,8 +151,8 @@ export default function App() {
 function Navbar() {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-evenly', margin: '10px 0 40px'}}>
-      <NavLink to="/statefull">Using state variables</NavLink>
-      <NavLink to="/stateless">Using stateless variables</NavLink>
+      <NavLink to="/statefull">Stateful Board</NavLink>
+      <NavLink to="/stateless">Stateless Board</NavLink>
       <NavLink to="/">Home</NavLink>
     </div>
   )

@@ -1,6 +1,6 @@
 import { Profiler, useCallback, useRef, useState } from 'react';
 import './App.css';
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import StatefulBoard from './components/StatefulBoard';
 import StatelessBoard from './components/StatelessBoard';
 import TestsInterface from './components/TestsInterface';
@@ -8,7 +8,7 @@ import { testSettings } from './performanceTests/config';
 
 
 export default function App() {
-
+  const location = useLocation();
   const renderCount = useRef(0);
   const averageRenderTime= useRef(0);
   const [testsActive, setTestsActive] = useState(false);
@@ -35,7 +35,8 @@ export default function App() {
     
     // skip the render time for the component mount phase
     if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + baseTime;
-    if(renderCount.current - 1 === gridSize) {
+    console.log(renderCount.current)
+    if((location.pathname === "/stateful" && renderCount.current === gridSize) || renderCount.current - 1 === gridSize) {
       console.log(`Average rerender time for ${gridSize} rerenders: ${averageRenderTime.current/gridSize}ms`);
     }
     renderCount.current = renderCount.current + 1;
@@ -141,7 +142,7 @@ export default function App() {
       {testsActive ? (
         <>
           <Routes>
-            <Route path="/statefull" element={<Profiler id="STATEFULL board component" onRender={renderCallback}>
+            <Route path="/stateful" element={<Profiler id="STATEFULL board component" onRender={renderCallback}>
                                                 <StatefulBoard 
                                                   rowSettings = {currentSettings[0]}
                                                   colSettings = {currentSettings[1]}
@@ -171,7 +172,7 @@ export default function App() {
         </>
       ) : (
         <Routes>
-          <Route path="/statefull" element={<StatefulBoard />}/>
+          <Route path="/stateful" element={<StatefulBoard />}/>
           <Route path="/stateless" element={<StatelessBoard />}/>
           <Route path="/" element={
             <>
@@ -188,7 +189,7 @@ export default function App() {
 function Navbar() {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-evenly', margin: '10px 0 40px'}}>
-      <NavLink to="/statefull">Stateful Board</NavLink>
+      <NavLink to="/stateful">Stateful Board</NavLink>
       <NavLink to="/stateless">Stateless Board</NavLink>
       <NavLink to="/">Tests Settings</NavLink>
     </div>

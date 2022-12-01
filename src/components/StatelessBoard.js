@@ -5,7 +5,7 @@ let matrix,
     queue,
     pointer_stateless
 
-function StatelessBoard({rowSettings, colSettings, testsActive}){
+function StatelessBoard({rowSettings, colSettings, testsActive, setTestResult}){
 
     const [handle, setHandle] = useState(null);
     const page = useRef(null);
@@ -56,8 +56,11 @@ function StatelessBoard({rowSettings, colSettings, testsActive}){
             pointer_stateless++;
             setHandle({});
         },500)
-        return () => clearInterval(intervalId);
-    },[testsActive, colSettings]);
+        return () => {
+            clearInterval(intervalId);
+            setTestResult && setTestResult("");
+        }
+    },[testsActive, colSettings, setTestResult]);
 
     if(!handle || !page.current) return null;
 

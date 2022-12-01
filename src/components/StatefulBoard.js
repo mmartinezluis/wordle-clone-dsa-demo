@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import { ALPHABET, BOARD, QUEUE } from '../tools/tools';
 
-function StatefulBoard({rowSettings, colSettings, testsActive}) {
+function StatefulBoard({rowSettings, colSettings, testsActive, setTestResult}) {
 
     const [pointer, setPointer] = useState(0)
     const pointerRef = useRef(0);
@@ -50,8 +50,11 @@ function StatefulBoard({rowSettings, colSettings, testsActive}) {
                 return clone;
             });
         },500)
-        return () => clearInterval(intervalId);
-    }, [testsActive, colSettings]);
+        return () => {
+          clearInterval(intervalId);
+          setTestResult && setTestResult("")
+        }
+    }, [testsActive, colSettings, setTestResult]);
     
     return (
       <div className='board'>

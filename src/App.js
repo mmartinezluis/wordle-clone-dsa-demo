@@ -46,6 +46,7 @@ export default function App() {
   const resetTests = useCallback(() => {
     renderCount.current = 0;
     averageRenderTime.current = 0;
+    setTestResult("");
     setTestsActive(() => true);
   },[])
 

@@ -45,9 +45,6 @@
   justify-content: center;
   align-items: center;
 }
-.matrix {
-  margin-top: 50px;
-}
 
 .row {
   display: flex;

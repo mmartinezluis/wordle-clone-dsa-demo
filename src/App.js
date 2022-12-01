@@ -12,8 +12,10 @@ export default function App() {
   const renderCount = useRef(0);
   const averageRenderTime= useRef(0);
   const [testsActive, setTestsActive] = useState(false);
-  const [currentSettings, setCurrentSettings] = useState(testSettings.grid.normal);
-  const [testOption,setTestOption] = useState("normal");
+  const [currentSettings, setCurrentSettings] = useState(testSettings.grid.standard);
+  const [testOption,setTestOption] = useState("standard");
+
+  const gridSize = currentSettings[0]*currentSettings[1];
 
   const renderCallback = (
     id,
@@ -29,7 +31,7 @@ export default function App() {
     console.log(`Start time: ${startTime}`)
     console.log(`Coomit time: ${commitTime}`)
 
-    const gridSize = currentSettings[0]*currentSettings[1];
+    // const gridSize = currentSettings[0]*currentSettings[1];
     // skip the render time for the component mount phase
     if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + baseTime;
     if((location.pathname === "/stateful" && renderCount.current === gridSize) || renderCount.current - 1 === gridSize) {
@@ -65,8 +67,8 @@ export default function App() {
         <label>
         <input 
           type="radio" 
-          value="normal" 
-          checked={testOption === "normal"}
+          value="standard" 
+          checked={testOption === "standard"}
           onChange={handleButtonChange}
         />Standard grid (6X5) (30 rerenders)
         </label>
@@ -99,7 +101,7 @@ export default function App() {
   return (
     <div className="App">
       <Navbar />
-      Mode: {testsActive ? "Test" : "Normal"}
+      Mode: {testsActive ? `Test | Grid: ${testOption} (${currentSettings[0]}x${currentSettings[1]}) (${gridSize} rerenders)` : "Normal"}
       {testsActive ? (
         <>
           <Routes>

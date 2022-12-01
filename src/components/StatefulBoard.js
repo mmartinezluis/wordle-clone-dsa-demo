@@ -23,13 +23,13 @@ function StatefulBoard({rowSettings, colSettings, testsActive}) {
           setPointer(() => 0)
         }
       } 
-    },[board, pointer])
+    },[board, pointer, colSettings])
   
     useEffect(() => {
       if(testsActive) return;
       document.addEventListener('keydown', onKeyDown, true);
       return () => document.removeEventListener('keydown', onKeyDown, true);
-    },[onKeyDown]);
+    },[onKeyDown, testsActive]);
 
     useEffect(() => { 
         if(!testsActive) return;
@@ -51,7 +51,7 @@ function StatefulBoard({rowSettings, colSettings, testsActive}) {
             });
         },500)
         return () => clearInterval(intervalId);
-    }, []);
+    }, [testsActive, colSettings]);
     
     return (
       <div className='board'>

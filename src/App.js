@@ -12,9 +12,7 @@ export default function App() {
   const renderCount = useRef(0);
   const averageRenderTime= useRef(0);
   const [testsActive, setTestsActive] = useState(false);
-  // const currentSettings = useRef(testSettings.grid.normal);
   const [currentSettings, setCurrentSettings] = useState(testSettings.grid.normal);
-  // const testOptions = useRef([]);
   const [testOption,setTestOption] = useState("normal");
 
   const renderCallback = (
@@ -35,7 +33,6 @@ export default function App() {
     
     // skip the render time for the component mount phase
     if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + baseTime;
-    console.log(renderCount.current)
     if((location.pathname === "/stateful" && renderCount.current === gridSize) || renderCount.current - 1 === gridSize) {
       console.log(`Average rerender time for ${gridSize} rerenders: ${averageRenderTime.current/gridSize}ms`);
     }
@@ -54,20 +51,12 @@ export default function App() {
   }
   
   const handleCheckbox = (e) => {
-    console.log(e.target.checked)
     e.target.checked ? resetTests() : turnOffTests();
   }
 
   const handleButtonChange = (e) => {
     setTestOption(e.target.value);
     setCurrentSettings(testSettings.grid[e.target.value])
-    // testOptions.current.forEach(input => {
-    //   if(input.value === e.target.value) {
-    //     e.target.checked = true;
-    //     currentSettings.current = testSettings.grid[e.target.value]
-    //   } else input.checked = false;
-    // })
-    // console.log(currentSettings.current)
   }
 
   console.log(testsActive)
@@ -99,33 +88,6 @@ export default function App() {
         />Large grid (20x10) (200 rerenders)
         </label>
       </div>
-  // const testsPanel =
-  //     <div className='tests-panel'>
-  //       <label>
-  //       <input 
-  //         type="radio" 
-  //         value="normal" 
-  //         onChange={handleButtonChange}
-  //         ref={(el) => testOptions.current[0] = el}
-  //       />Standard grid (6X5) (30 rerenders)
-  //       </label>
-  //       <label>
-  //       <input 
-  //         type="radio" 
-  //         value="medium"
-  //         onChange={handleButtonChange}
-  //         ref={(el) => testOptions.current[1] = el}
-  //       />Medium grid (10X10) (100 rerenders)
-  //       </label>
-  //       <label>
-  //       <input 
-  //         type="radio" 
-  //         value="large" 
-  //         onChange={handleButtonChange}
-  //         ref={(el) => testOptions.current[2] = el}
-  //       />Large grid (20x10) (200 rerenders)
-  //       </label>
-  //     </div>
 
   const testsCheckbox =
     <label>
@@ -152,8 +114,6 @@ export default function App() {
                                               }/>
             <Route path="/stateless" element={<Profiler id="STATELESS board component" onRender={renderCallback}> 
                                                 <StatelessBoard 
-                                                  // rowSettings = {() => currentSettings.current[0]}
-                                                  // colSettings = {() => currentSettings.current[1]}
                                                   rowSettings = {currentSettings[0]}
                                                   colSettings = {currentSettings[1]}
                                                   testsActive = {testsActive}

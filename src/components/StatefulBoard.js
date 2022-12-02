@@ -9,7 +9,6 @@ function StatefulBoard({rowSettings, colSettings, testsActive, setTestResult}) {
     const queue = useRef(QUEUE(rowSettings))
     
     const onKeyDown = useCallback ((e) => {
-      console.log(e.key)
       if(!queue.current.length) return;
       const index = e.key.toLowerCase().charCodeAt(0) - 97;
       if(ALPHABET[index] !== e.key.toUpperCase()) return;
@@ -52,7 +51,7 @@ function StatefulBoard({rowSettings, colSettings, testsActive, setTestResult}) {
         },500)
         return () => {
           clearInterval(intervalId);
-          setTestResult && setTestResult("")
+          setTestResult && setTestResult("");
         }
     }, [testsActive, colSettings, setTestResult]);
     

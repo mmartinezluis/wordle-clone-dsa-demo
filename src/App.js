@@ -1,6 +1,6 @@
 import { Profiler, useCallback, useRef, useState } from 'react';
 import './App.css';
-import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { NavLink, Route, Routes } from 'react-router-dom';
 import StatefulBoard from './components/StatefulBoard';
 import StatelessBoard from './components/StatelessBoard';
 import TestsInterface from './components/TestsInterface';
@@ -8,7 +8,6 @@ import { testSettings } from './performanceTests/config';
 
 
 export default function App() {
-  const location = useLocation();
   const renderCount = useRef(0);
   const averageRenderTime= useRef(0);
   const [testsActive, setTestsActive] = useState(false);
@@ -34,8 +33,8 @@ export default function App() {
     console.log(`Coomit time: ${commitTime}`)
 
     // skip the render time for the component mount phase
-    if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + baseTime;
-    if((location.pathname === "/stateful" && renderCount.current === gridSize) || renderCount.current - 1 === gridSize) {
+    if(renderCount.current > 0) averageRenderTime.current = averageRenderTime.current + actualTime;
+    if((window.location.href.includes("/stateful") && renderCount.current === gridSize) || renderCount.current - 1 === gridSize) {
       setTestResult(`Average rerender time for ${gridSize} rerenders: ${(averageRenderTime.current/gridSize).toFixed(6)}ms`)
       console.log(`Average rerender time for ${gridSize} rerenders: ${averageRenderTime.current/gridSize}ms`);
     }
@@ -48,8 +47,6 @@ export default function App() {
     averageRenderTime.current = 0;
     setTestResult("");
     setTestsActive(() => true);
-    setTestOption("standard");
-    setCurrentSettings(testSettings.grid.standard);
   },[])
 
   const turnOffTests = () => {

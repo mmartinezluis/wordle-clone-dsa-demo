@@ -3,7 +3,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Bree Serif';
+  /* font-family: 'Bree Serif'; */
+  font-family: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;;
 }
 
 body {
@@ -66,6 +67,7 @@ body {
 a {
   color: white;
   text-decoration: none;
+  font-weight: 500;
 }
 
 .board,
@@ -74,7 +76,7 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin: 20px 0;
 }
 
 .row {
@@ -131,7 +133,6 @@ label[for=switch]:after {
 }
 
 input#switch:checked + label[for=switch] {
-	/* background: #bada55; */
 	background: #1e88e5;
 }
 
@@ -143,14 +144,6 @@ input#switch:checked + label[for=switch]:after {
 label[for=switch]:active:after {
 	width: 130px;
 }
-
-/* // centering */
-/* body {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
-} */
 /* Tests Toggle button styles END */
 
 
@@ -170,13 +163,7 @@ label[for=switch]:active:after {
 .tests-panel label {
   color: white
 }
-/* input[type=radio] + label {
-  color: #545e6f;
-}
-input[type=radio]:checked + label {
-  color: #fff;
-  background-color: #2196f3;
-} */
+
 [type="radio"]:checked,
 [type="radio"]:not(:checked) {
     position: absolute;
@@ -190,7 +177,8 @@ input[type=radio]:checked + label {
     cursor: pointer;
     line-height: 20px;
     display: inline-block;
-    color: #666;
+    /* color: #666; */
+    color: black;
 }
 [type="radio"]:checked + label:before,
 [type="radio"]:not(:checked) + label:before {
@@ -202,7 +190,6 @@ input[type=radio]:checked + label {
     height: 18px;
     border: 1px solid #ddd;
     border-radius: 100%;
-    /* background: #fff; */
     background: #ddd;
 }
 [type="radio"]:checked + label:after,
@@ -237,4 +224,18 @@ input[type=radio]:checked + label {
   background-color: #61dafb;
   color: black;
   border-radius: 5px;
+}
+
+.tests-note {
+  display: flex;
+  align-items: center;
+  padding: 30px 20px 20px;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+@media(max-width: 460px) {
+  .tests-note {
+    max-width: 90%;
+  }
 }

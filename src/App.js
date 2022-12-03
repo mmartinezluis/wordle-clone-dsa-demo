@@ -63,8 +63,6 @@ export default function App() {
     setCurrentSettings(testSettings.grid[e.target.value])
   }
 
-  console.log(testsActive)
-
   const testsPanel =
       <div className='tests-panel'>
         <div>
@@ -120,60 +118,60 @@ export default function App() {
     
 
   return (
-    <div className="App">      
-      <Navbar />
-      <p>Mode: {testsActive ? `Test | Grid: ${testOption} (${currentSettings[0]}x${currentSettings[1]}) (${gridSize} rerenders)` : "Normal"}</p>
-      {testResult.length ?
-        <div className='test-result'><p>Test Result:</p><p>{testResult}</p></div>
-        : null
-      }
-      {testsActive ? (
-        <Routes>
-            <Route path="/stateful" element={
-                <Profiler id="STATEFULL board component" onRender={renderCallback}>
-                    <StatefulBoard 
+    <div className="App">     
+        <Navbar />
+        <p>Mode: {testsActive ? `Test | Grid: ${testOption} (${currentSettings[0]}x${currentSettings[1]}) (${gridSize} rerenders)` : "Normal"}</p>
+        {testResult.length ?
+          <div className='test-result'><p>Test Result:</p><p>{testResult}</p></div>
+          : null
+        }
+        {testsActive ? (
+          <Routes>
+              <Route path="/stateful" element={
+                  <Profiler id="STATEFULL board component" onRender={renderCallback}>
+                      <StatefulBoard 
+                        rowSettings = {currentSettings[0]}
+                        colSettings = {currentSettings[1]}
+                        testsActive = {testsActive}
+                        testResult = {testResult}
+                        setTestResult = {setTestResult}
+                      />
+                  </Profiler>
+              }/>
+              <Route path="/stateless" element={
+                  <Profiler id="STATELESS board component" onRender={renderCallback}> 
+                    <StatelessBoard 
                       rowSettings = {currentSettings[0]}
                       colSettings = {currentSettings[1]}
                       testsActive = {testsActive}
                       testResult = {testResult}
                       setTestResult = {setTestResult}
                     />
-                </Profiler>
-            }/>
-            <Route path="/stateless" element={
-                <Profiler id="STATELESS board component" onRender={renderCallback}> 
-                  <StatelessBoard 
-                    rowSettings = {currentSettings[0]}
-                    colSettings = {currentSettings[1]}
-                    testsActive = {testsActive}
-                    testResult = {testResult}
-                    setTestResult = {setTestResult}
-                  />
-                </Profiler>
-            }/>
+                  </Profiler>
+              }/>
+              <Route path="/" element={
+                <TestsInterface 
+                  testsCheckbox={testsCheckbox} 
+                  testsPanel={testsPanel}
+                  testsActive={testsActive}
+                  resetTests={resetTests}
+                />
+              }/>
+          </Routes>
+        ) : (
+          <Routes>
+            <Route path="/stateful" element={<StatefulBoard />}/>
+            <Route path="/stateless" element={<StatelessBoard />}/>
             <Route path="/" element={
-              <TestsInterface 
-                testsCheckbox={testsCheckbox} 
-                testsPanel={testsPanel}
-                testsActive={testsActive}
-                resetTests={resetTests}
-              />
+                <TestsInterface 
+                  testsCheckbox={testsCheckbox} 
+                  testsPanel={testsPanel}
+                  testsActive={testsActive}
+                  resetTests={resetTests}
+                />
             }/>
-        </Routes>
-      ) : (
-        <Routes>
-          <Route path="/stateful" element={<StatefulBoard />}/>
-          <Route path="/stateless" element={<StatelessBoard />}/>
-          <Route path="/" element={
-              <TestsInterface 
-                testsCheckbox={testsCheckbox} 
-                testsPanel={testsPanel}
-                testsActive={testsActive}
-                resetTests={resetTests}
-              />
-          }/>
-        </Routes>
-      )}
+          </Routes>
+        )}
     </div>
   );
 }

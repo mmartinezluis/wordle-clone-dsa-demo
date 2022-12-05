@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "WCDSA Performance Tests",
+  "name": "Wordle Clone DSA Performance Tests",
   "icons": [
     {
       "src": "favicon.ico",

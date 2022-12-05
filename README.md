@@ -6,6 +6,8 @@
 
 **Component rerender** performance tests through React Profiler comparing the performance of a stateful board and a stateless board for [Wordle Clone DSA](https://github.com/mmartinezluis/wordle-clone-dsa). The tests are exposed through a TestsInterface component that allows running the tests right from the UI (user interface). Test results are displayed on the UI as well. While running, the tests' data can be observed from the browser's console. 
 
+Since the tests are exposed in the UI, the tests and components were carefully written so that there is no side effect interferance for the measured test variables.
+
 ## Test Results Discussion
 You can find a discussion about the tests along with a data table for 30 test trials in the blog post [*Designing Wordle: Wordle Clone DSA, Part II: Data Implementation*](https://devblog.dev/luismartinez/designing-wordle-wordle-clone-dsa-part-ii-data-implementation-1d370b6514), section *Rerendering the Board Component, Method II: Using Stateless Variables plus a Switch State Variable*. 
 

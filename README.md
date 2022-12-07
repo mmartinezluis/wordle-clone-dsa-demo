@@ -1,7 +1,7 @@
 # Wordle Clone DSA Performance Tests
 
 <p align="center">
-    (You can click below to play with the tests live)
+    (You can click below to play with the tests live)<br/>
     <a href="https://k2cc2k.csb.app/" target="_blank" rel="noreferrer">
         <img width="700" alt="WCDSA-featured-image" src="https://user-images.githubusercontent.com/75151961/205560270-e4bba031-12da-4ca8-911e-2df31a5fa44e.png">
     </a>

@@ -1,7 +1,9 @@
 # Wordle Clone DSA Performance Tests
 
 <p align="center">
-    <img width="700" alt="WCDSA-featured-image" src="https://user-images.githubusercontent.com/75151961/205560270-e4bba031-12da-4ca8-911e-2df31a5fa44e.png">
+    <a href="https://k2cc2k.csb.app/" rel="noreferrer">
+        <img width="700" alt="WCDSA-featured-image" src="https://user-images.githubusercontent.com/75151961/205560270-e4bba031-12da-4ca8-911e-2df31a5fa44e.png">
+    </a>
 </p>
 
 **Component rerender** performance tests through React Profiler comparing the performance of a stateful board and a stateless board for [Wordle Clone DSA](https://github.com/mmartinezluis/wordle-clone-dsa). The tests are exposed through a TestsInterface component that allows running the tests right from the UI (user interface). Test results are displayed on the UI as well. While running, the tests' data can be observed from the browser's console. 
